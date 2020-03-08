@@ -7,8 +7,8 @@ import (
 	"os"
 	"strconv"
 
-	"gopkg.in/yaml.v2"
 	"github.com/aws/aws-sdk-go/aws/session"
+	"gopkg.in/yaml.v2"
 )
 
 //SessionObj will automatically create an AWS session object looking for environment vars
@@ -35,8 +35,32 @@ func fileExists(fileName string) bool {
 	return true
 }
 
-//NewConfiguration returns a configuration to use
-func NewConfiguration(fileName string) (*Configuration, error) {
+//NewConfigurationFromEnvironment returns a configuration to use from environment variables
+func NewConfigurationFromEnvironment(fileName string) (*Configuration, error) {
+	var config *Configuration
+
+	if len(os.Getenv("D2_ZONE_ID")) < 1 {
+		return nil, fmt.Errorf("no route53 zoneid defined in env, expect D2_ZONE_ID")
+	}
+	config.ZoneID = os.Getenv("D2_ZONE_ID")
+
+	if len(os.Getenv("D2_DNS_RECORD")) < 1 {
+		return nil, fmt.Errorf("no dns record to modify specified, expect D2_DNS_RECORD")
+	}
+	config.Record = os.Getenv("D2_DNS_RECORD")
+	notify, err := strconv.ParseBool(os.Getenv("D2_SNS_NOTIFY"))
+	if err != nil {
+		notify = false
+	}
+	config.Notify.SNSNotify = notify
+	config.Notify.SNSTopic = os.Getenv("SNSTopic")
+	config.Notify.SNSMessage = os.Getenv("SNSMessage")
+
+	return config, nil
+}
+
+//NewConfigurationFromFile returns a pointer to a new configuration loaded from a yaml file
+func NewConfigurationFromFile(fileName string) (*Configuration, error) {
 	var config *Configuration
 
 	loadFile := fileExists(fileName)
@@ -51,19 +75,6 @@ func NewConfiguration(fileName string) (*Configuration, error) {
 			log.Fatal("Unable To Parse Config!")
 			return nil, err
 		}
-
-	} else {
-		config.ZoneID = os.Getenv("DYN_ZONE_ID")
-		config.Record = os.Getenv("DYN_DNS_RECORD")
-		notify, err := strconv.ParseBool(os.Getenv("DYN_SNS_NOTIFY"))
-		if err != nil {
-			notify = false
-		}
-		config.Notify.SNSNotify = notify
-		config.Notify.SNSTopic = os.Getenv("SNSTopic")
-		config.Notify.SNSMessage = os.Getenv("SNSMessage")
-		return config, nil
 	}
-
-	return nil, fmt.Errorf("no config found")
+	return config, nil
 }

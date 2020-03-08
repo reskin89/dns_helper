@@ -1,3 +1,8 @@
 ---
 zone_id: ABCDEFG1234
 record: somedomain.example.com
+sns_notify:
+  sns_notify: true
+  sns_topic: mytopic
+  sns_message: |
+    Some message to send!
