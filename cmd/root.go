@@ -19,26 +19,30 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"os"
+	"github.com/reskin89/dns_helper/dyndns"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
 )
 
 var cfgFile string
+var cfgFlag bool
+var cfgFileName string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "d2",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	//	Run: func(cmd *cobra.Command, args []string) { },
+	Short: "d2 (dyndns) is a small command to configure dynamic dns",
+	Long: `d2 (dyndns) is a dyndns binary, intended to be run by a scheduler, to attain the 
+	public ip of the running machine (even if behind NAT, the public NAT IP will be used)
+	and update a provided route53 zone and dns A record if the IP and A record are different. 
+	Currently only support IPv4`,
+	Run: func(cmd *cobra.Command, args []string) { 
+		err := RunUpdater(args)
+		if err != nil {
+			log.Fatal(err)
+		}
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -51,6 +55,7 @@ func Execute() {
 }
 
 func init() {
+	rootCmd.Flags().
 	cobra.OnInitialize(initConfig)
 
 	// Here you will define your flags and configuration settings.
@@ -88,4 +93,8 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
+}
+
+func RunUpdater(args []string) error {
+
 }

@@ -18,6 +18,7 @@ func init() {
 	SessionObj = session.Must(session.New())
 }
 
+//fileExists checks to see if the filename provided (if provided) exists, and if not, returns false
 func fileExists(fileName string) bool {
 	if len(fileName) < 1 {
 		return false
