@@ -8,7 +8,15 @@ import (
 	"strconv"
 
 	"gopkg.in/yaml.v2"
+	"github.com/aws/aws-sdk-go/aws/session"
 )
+
+//SessionObj will automatically create an AWS session object looking for environment vars
+var SessionObj *session.Session
+
+func init() {
+	SessionObj = session.Must(session.New())
+}
 
 func fileExists(fileName string) bool {
 	if len(fileName) < 1 {
