@@ -1,5 +1,3 @@
-region?=us-east-1
-
 build: clean check-arch
 	CGO_ENABLED=0 GOOS=linux GOARCH=$(arch) go build -a -o d2 .
 
