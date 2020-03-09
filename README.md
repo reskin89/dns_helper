@@ -26,3 +26,4 @@ It is recommended that the credentials provided only have an IAM policy to updat
 * More DNS Providers
 * A "Whats My IP" Service for this cli hosted by AWS API Gateway and AWS Lambda
 * The Open Source Terraform/Cloudformation for this service as well
+* Tests
