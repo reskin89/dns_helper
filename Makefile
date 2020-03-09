@@ -1,6 +1,6 @@
 region?=us-east-1
 
-build: check-appname clean check-arch
+build: clean check-arch
 	CGO_ENABLED=0 GOOS=linux GOARCH=$(arch) go build -a -o d2 .
 
 #Build default builds the cli binary for alpine linux to run it as a cron from a container (whether it be crontab or something like the k8s scheduler)
