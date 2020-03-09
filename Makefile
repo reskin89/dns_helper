@@ -10,7 +10,7 @@ build-default:
 test:
 	go test
 
-clean: check-appname
+clean:
 	go clean
 	rm -f d2
 

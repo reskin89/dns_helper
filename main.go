@@ -15,7 +15,7 @@ limitations under the License.
 */
 package main
 
-import "d2/cmd"
+import "dns_helper/cmd"
 
 func main() {
 	cmd.Execute()

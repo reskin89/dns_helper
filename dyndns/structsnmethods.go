@@ -24,7 +24,7 @@ type SNSNotify struct {
 	SNSMessage string `yaml:"sns_message"`
 }
 
-func (c Configuration) getPublicIP() error {
+func (c Configuration) GetPublicIP() error {
 	resp, err := http.Get("ifconfig.me")
 	if err != nil {
 		return err
@@ -40,7 +40,7 @@ func (c Configuration) getPublicIP() error {
 	return nil
 }
 
-func (c Configuration) updateDNS(ipAddress []byte) error {
+func (c Configuration) UpdateDNS() error {
 	updater := route53.New(SessionObj)
 
 	params := &route53.ChangeResourceRecordSetsInput{

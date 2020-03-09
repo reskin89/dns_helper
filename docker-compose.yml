@@ -8,7 +8,7 @@ services:
       AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
       AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
     volumes:
-      - .:/go/src/github.com/reskin89/dns_helper
+      - .:/go/src/dns_helper
     stdin_open: true
     tty: true
-    working_dir: /go/src/github.com/reskin89/dns_helper
+    working_dir: /go/src/dns_helper

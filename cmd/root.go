@@ -17,17 +17,17 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
+	"log"
 	"os"
-	"github.com/reskin89/dns_helper/dyndns"
 
 	homedir "github.com/mitchellh/go-homedir"
+	"github.com/reskin89/dns_helper/dyndns"
+	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
 var cfgFile string
-var cfgFlag bool
-var cfgFileName string
+var dynCfg string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -37,7 +37,7 @@ var rootCmd = &cobra.Command{
 	public ip of the running machine (even if behind NAT, the public NAT IP will be used)
 	and update a provided route53 zone and dns A record if the IP and A record are different. 
 	Currently only support IPv4`,
-	Run: func(cmd *cobra.Command, args []string) { 
+	Run: func(cmd *cobra.Command, args []string) {
 		err := RunUpdater(args)
 		if err != nil {
 			log.Fatal(err)
@@ -55,8 +55,9 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.Flags().
 	cobra.OnInitialize(initConfig)
+
+	rootCmd.PersistentFlags().StringVar(&dynCfg, "dynconfig", "", "Config File for DynDns (yml)")
 
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
@@ -96,5 +97,28 @@ func initConfig() {
 }
 
 func RunUpdater(args []string) error {
+	var conf Configuration
 
+	if dynCfg != nil {
+		conf, err := dns_helper.NewConfigurationFromFile(dynCfg)
+		if err != nil {
+			log.Println(err)
+			conf, err := dns_helper.NewConfigurationFromEnvironment()
+			if err != nil {
+				log.Println("Unable to load config from given file or environment...exiting....")
+				log.Fatal(err)
+			}
+		}
+	} else {
+		conf, err := dns_helper.NewConfigurationFromEnvironment()
+			if err != nil {
+				log.Println("Unable to load config from environment...exiting....")
+				log.Fatal(err)
+			}
+	}
+
+	conf 
+	log.Println(args)
+
+	return nil
 }
