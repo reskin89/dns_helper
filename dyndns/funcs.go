@@ -15,7 +15,7 @@ import (
 var SessionObj *session.Session
 
 func init() {
-	SessionObj = session.Must(session.New())
+	SessionObj = session.Must(session.NewSession())
 }
 
 //fileExists checks to see if the filename provided (if provided) exists, and if not, returns false

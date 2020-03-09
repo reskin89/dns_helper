@@ -97,27 +97,28 @@ func initConfig() {
 }
 
 func RunUpdater(args []string) error {
-	var conf Configuration
 
-	if dynCfg != nil {
-		conf, err := dns_helper.NewConfigurationFromFile(dynCfg)
+	if dynCfg != "" {
+		conf, err := dyndns.NewConfigurationFromFile(dynCfg)
 		if err != nil {
 			log.Println(err)
-			conf, err := dns_helper.NewConfigurationFromEnvironment()
+			conf, err := dyndns.NewConfigurationFromEnvironment("foo")
 			if err != nil {
 				log.Println("Unable to load config from given file or environment...exiting....")
 				log.Fatal(err)
 			}
+			log.Println(conf)
 		}
+		log.Println(conf)
 	} else {
-		conf, err := dns_helper.NewConfigurationFromEnvironment()
-			if err != nil {
-				log.Println("Unable to load config from environment...exiting....")
-				log.Fatal(err)
-			}
+		conf, err := dyndns.NewConfigurationFromEnvironment("foo")
+		if err != nil {
+			log.Println("Unable to load config from environment...exiting....")
+			log.Fatal(err)
+		}
+		log.Println(conf)
 	}
 
-	conf 
 	log.Println(args)
 
 	return nil
