@@ -15,7 +15,7 @@ limitations under the License.
 */
 package main
 
-import "dns_helper/cmd"
+import "github.com/reskin89/dns_helper/cmd"
 
 func main() {
 	cmd.Execute()
